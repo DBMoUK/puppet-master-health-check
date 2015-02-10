@@ -1,19 +1,20 @@
 #!/bin/bash
 #
-# Script to make a proxy (ie HAProxy) capable of monitoring puppet master nodes
+# Script to make a proxy (ie HAProxy) capable of monitoring puppet master nodes using v2.0 environments endpoint
 #
-# Author: Robert Birnie <rbirnie@gmail.com>
+# Original Author: Robert Birnie <rbirnie@gmail.com>
 # Documentation and download: https://github.com/rbirnie/puppet-master-health-check
 #
 # Based on the original script from Unai Rodriguez and Olaf van Zandwijk
 #
+# Updated: David Bryant-Moore.  Puppetlabs.  <david.bmoore@puppetlabs.com>
 
 ERR_FILE="/dev/null"
 
 #
 # Curl puppet status for prod
 #
-puppet_status=`/usr/bin/curl -ksS -H "Accept: pson" https://<%= @fqdn %>:8140/production/status/no_key | \
+puppet_status=`/usr/bin/curl -ksS -H "Accept: pson" https://<%= @fqdn %>:8140/v2.0/environments/no_key | \
                grep "\"is_alive\":true" >${ERR_FILE} 2>&1; echo $?`
 
 if [ "${puppet_status}" == "0" ]
